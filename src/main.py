@@ -1,6 +1,9 @@
 import sys
 import readDataset as reader
 import numpy as np
+import linear_model
+
+LinearModel = linear_model.LinearModel
 
 
 def main(redDataset, whiteDataset):
@@ -13,6 +16,15 @@ def main(redDataset, whiteDataset):
     redTrainY = redResult[0:redIndex]
     redTestX = redFeatures[redIndex:redLength]
     redTestY = redResult[redIndex:redLength]
+
+    print(redTrainX)
+    linearModel = LinearModel()
+    linearModel.fit(redTrainX, redTrainY)
+    for n in range(len(redTestX)):
+        prediction = int(round(linearModel.predict(redTestX[n]),0))
+        trueLabel = redTestY[n]
+        same = prediction == trueLabel
+        print(f"prediction: {prediction}, true: {trueLabel}, same: {same}")
 
     whiteLength = len(whiteFeatures)
     whiteIndex = round(0.8*whiteLength)
