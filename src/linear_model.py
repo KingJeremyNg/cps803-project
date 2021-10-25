@@ -136,4 +136,11 @@ class LinearModel(object):
         # *** START CODE HERE ***
         return X.dot(self.theta)
         # *** END CODE HERE ***
+
+    def predict_array(self, arrayX):
+        results = []
+        for n in range(len(arrayX)):
+            prediction = int(round(self.predict(arrayX[n]),0))
+            results.append(prediction)
+        return results
        

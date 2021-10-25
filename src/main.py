@@ -5,6 +5,19 @@ import linear_model
 
 LinearModel = linear_model.LinearModel
 
+def compareResults(predictions, trueLabels, verbose=False, note="Unknown"):
+    if (len(predictions) != len(trueLabels)):
+        raise ValueError("The lengths of predictions and trueLabels are not the same.")
+    numSuccess = 0
+    for n in range(len(predictions)):
+        prediction = predictions[n]
+        trueLabel = trueLabels[n]
+        success = prediction == trueLabel
+        if success:
+            numSuccess += 1
+        if (verbose):
+            print(f"prediction: {prediction}, true label: {trueLabel}, success: {success}")
+    print(f"{note} success rate: {100*numSuccess/len(predictions)}%.")
 
 def main(redDataset, whiteDataset):
     redFeatures, redResult = reader.readDataset(redDataset)
@@ -17,14 +30,11 @@ def main(redDataset, whiteDataset):
     redTestX = redFeatures[redIndex:redLength]
     redTestY = redResult[redIndex:redLength]
 
-    print(redTrainX)
-    linearModel = LinearModel()
-    linearModel.fit(redTrainX, redTrainY)
-    for n in range(len(redTestX)):
-        prediction = int(round(linearModel.predict(redTestX[n]),0))
-        trueLabel = redTestY[n]
-        same = prediction == trueLabel
-        print(f"prediction: {prediction}, true: {trueLabel}, same: {same}")
+    redLinearModel = LinearModel()
+    redLinearModel.fit(redTrainX, redTrainY)
+    redPredictions = redLinearModel.predict_array(redTestX)
+    compareResults(redPredictions, redTestY, note="red")
+        
 
     whiteLength = len(whiteFeatures)
     whiteIndex = round(0.8*whiteLength)
@@ -32,6 +42,11 @@ def main(redDataset, whiteDataset):
     whiteTrainY = whiteResult[0:whiteIndex]
     whiteTestX = whiteFeatures[whiteIndex:whiteLength]
     whiteTestY = whiteResult[whiteIndex:whiteLength]
+
+    whiteLinearModel = LinearModel()
+    whiteLinearModel.fit(whiteTrainX, whiteTrainY)
+    whitePredictions = whiteLinearModel.predict_array(whiteTestX)
+    compareResults(whitePredictions, whiteTestY, note="white")
 
 
 if __name__ == '__main__':
