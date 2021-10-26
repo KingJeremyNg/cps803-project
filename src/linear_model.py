@@ -100,7 +100,6 @@ class LinearModel(object):
             feature_map = np.c_[feature_map, X[:, 1]**i]
 
         return feature_map
-
         # *** END CODE HERE ***
 
     def create_cosine(self, k, X):
@@ -145,3 +144,4 @@ class LinearModel(object):
             prediction = int(round(self.predict(arrayX[n]), 0))
             results.append(prediction)
         return results
+
