@@ -1,5 +1,9 @@
 import numpy as np
 
+ITERATIONS = 10000
+LEARNING_RATE = 0.01
+
+
 class LinearModel(object):
     """Base class for linear models."""
 
@@ -38,7 +42,6 @@ class LinearModel(object):
         print(f"iterations: {ITERATIONS}")
         print(f"inputs: {m}")
         self.theta = np.zeros([dimensions])
-        
 
         # iterations
         for iteration in range(ITERATIONS):
@@ -97,8 +100,6 @@ class LinearModel(object):
             feature_map = np.c_[feature_map, X[:, 1]**i]
 
         return feature_map
-
-
         # *** END CODE HERE ***
 
     def create_cosine(self, k, X):
@@ -140,7 +141,7 @@ class LinearModel(object):
     def predict_array(self, arrayX):
         results = []
         for n in range(len(arrayX)):
-            prediction = int(round(self.predict(arrayX[n]),0))
+            prediction = int(round(self.predict(arrayX[n]), 0))
             results.append(prediction)
         return results
-       
+

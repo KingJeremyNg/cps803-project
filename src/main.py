@@ -1,13 +1,13 @@
 import sys
-import readDataset as reader
 import numpy as np
-import linear_model
+from read_dataset import readDataset
+from linear_model import LinearModel
 
-LinearModel = linear_model.LinearModel
 
 def compareResults(predictions, trueLabels, verbose=False, note="Unknown"):
     if (len(predictions) != len(trueLabels)):
-        raise ValueError("The lengths of predictions and trueLabels are not the same.")
+        raise ValueError(
+            "The lengths of predictions and trueLabels are not the same.")
     numSuccess = 0
     for n in range(len(predictions)):
         prediction = predictions[n]
@@ -16,13 +16,16 @@ def compareResults(predictions, trueLabels, verbose=False, note="Unknown"):
         if success:
             numSuccess += 1
         if (verbose):
-            print(f"prediction: {prediction}, true label: {trueLabel}, success: {success}")
-    print(f"{note} success rate: {100*numSuccess/len(predictions)}%.")
+            print(
+                f"prediction: {prediction}, true label: {trueLabel}, success: {success}")
+    print(f"{note} success rate: {round((100*numSuccess)/len(predictions), 2)}%.")
+
 
 def main(redDataset, whiteDataset):
-    redFeatures, redResult = reader.readDataset(redDataset)
-    whiteFeatures, whiteResult = reader.readDataset(whiteDataset)
+    redFeatures, redResult = readDataset(redDataset)
+    whiteFeatures, whiteResult = readDataset(whiteDataset)
 
+    # Red dataset
     redLength = len(redFeatures)
     redIndex = round(0.8*redLength)
     redTrainX = redFeatures[0:redIndex]
@@ -30,12 +33,7 @@ def main(redDataset, whiteDataset):
     redTestX = redFeatures[redIndex:redLength]
     redTestY = redResult[redIndex:redLength]
 
-    redLinearModel = LinearModel()
-    redLinearModel.fit(redTrainX, redTrainY)
-    redPredictions = redLinearModel.predict_array(redTestX)
-    compareResults(redPredictions, redTestY, note="red")
-        
-
+    # White dataset
     whiteLength = len(whiteFeatures)
     whiteIndex = round(0.8*whiteLength)
     whiteTrainX = whiteFeatures[0:whiteIndex]
@@ -43,6 +41,13 @@ def main(redDataset, whiteDataset):
     whiteTestX = whiteFeatures[whiteIndex:whiteLength]
     whiteTestY = whiteResult[whiteIndex:whiteLength]
 
+    # Red dataset linear regression
+    redLinearModel = LinearModel()
+    redLinearModel.fit(redTrainX, redTrainY)
+    redPredictions = redLinearModel.predict_array(redTestX)
+    compareResults(redPredictions, redTestY, note="red")
+
+    # White dataset linear regression
     whiteLinearModel = LinearModel()
     whiteLinearModel.fit(whiteTrainX, whiteTrainY)
     whitePredictions = whiteLinearModel.predict_array(whiteTestX)
