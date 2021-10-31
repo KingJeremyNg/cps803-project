@@ -2,6 +2,7 @@ import sys
 import numpy as np
 from read_dataset import readDataset
 from linear_model import LinearModel
+import logistic_model
 
 
 def compareResults(predictions, trueLabels, verbose=False, note="Unknown"):
@@ -22,6 +23,7 @@ def compareResults(predictions, trueLabels, verbose=False, note="Unknown"):
 
 
 def main(redDataset, whiteDataset):
+    # Load dataset
     redFeatures, redResult = readDataset(redDataset)
     whiteFeatures, whiteResult = readDataset(whiteDataset)
 
@@ -41,6 +43,7 @@ def main(redDataset, whiteDataset):
     whiteTestX = whiteFeatures[whiteIndex:whiteLength]
     whiteTestY = whiteResult[whiteIndex:whiteLength]
 
+    print("\nLinear Regression:")
     # Red dataset linear regression
     redLinearModel = LinearModel()
     redLinearModel.fit(redTrainX, redTrainY)
@@ -53,6 +56,26 @@ def main(redDataset, whiteDataset):
     whitePredictions = whiteLinearModel.predict_array(whiteTestX)
     compareResults(whitePredictions, whiteTestY, note="white")
 
+    print("\nLogistic Regression:")
+    # Red dataset logistic regression
+    trainY = np.array([1 if x > 5 else 0 for x in redTrainY])
+    testY = np.array([1 if x > 5 else 0 for x in redTestY])
+    train_x_inter = logistic_model.add_intercept(redTrainX)
+    test_x_inter = logistic_model.add_intercept(redTestX)
+    classifier = logistic_model.LogisticModel(max_iter=1000, verbose=False)
+    classifier.fit(train_x_inter, trainY)
+    pred_y_prob = classifier.predict(test_x_inter)
+    compareResults([round(x) for x in pred_y_prob], testY, note="red")
+
+    # White dataset logistic regression
+    trainY = np.array([1 if x > 5 else 0 for x in whiteTrainY])
+    testY = np.array([1 if x > 5 else 0 for x in whiteTestY])
+    train_x_inter = logistic_model.add_intercept(whiteTrainX)
+    test_x_inter = logistic_model.add_intercept(whiteTestX)
+    classifier = logistic_model.LogisticModel(max_iter=1000, verbose=False)
+    classifier.fit(train_x_inter, trainY)
+    pred_y_prob = classifier.predict(test_x_inter)
+    compareResults([round(x) for x in pred_y_prob], testY, note="white")
 
 if __name__ == '__main__':
     main(redDataset='../data/winequality-red.csv',
