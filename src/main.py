@@ -1,8 +1,10 @@
 import sys
 import numpy as np
 from read_dataset import readDataset
-from linear_model import LinearModel
-import logistic_model
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
 
 
 def compareResults(predictions, trueLabels, verbose=False, note="Unknown"):
@@ -20,6 +22,34 @@ def compareResults(predictions, trueLabels, verbose=False, note="Unknown"):
             print(
                 f"prediction: {prediction}, true label: {trueLabel}, success: {success}")
     print(f"{note} success rate: {round((100*numSuccess)/len(predictions), 2)}%.")
+
+
+def linearModel(trainX, trainY, testX, testY, note="Unknown"):
+    reg = LinearRegression().fit(trainX, trainY)
+    prediction = [round(x) for x in reg.predict(testX)]
+    compareResults(prediction, testY, note=note)
+
+
+def logisticModel(trainX, trainY, testX, testY, note="Unknown"):
+    logTrainY = [1 if x > 5 else 0 for x in trainY]
+    logTestY = [1 if x > 5 else 0 for x in testY]
+    log = LogisticRegression()
+    log.max_iter = 1000
+    log.fit(trainX, logTrainY)
+    prediction = [round(x) for x in log.predict(testX)]
+    compareResults(prediction, logTestY, note=note)
+
+
+def naiveBayes(trainX, trainY, testX, testY, note="Unknown"):
+    bayes = GaussianNB().fit(trainX, trainY)
+    prediction = bayes.predict(testX)
+    compareResults(prediction, testY, note=note)
+
+
+def knn(trainX, trainY, testX, testY, note="Unknown"):
+    knn = KNeighborsClassifier().fit(trainX, trainY)
+    prediction = knn.predict(testX)
+    compareResults(prediction, testY, note=note)
 
 
 def main(redDataset, whiteDataset):
@@ -43,39 +73,27 @@ def main(redDataset, whiteDataset):
     whiteTestX = whiteFeatures[whiteIndex:whiteLength]
     whiteTestY = whiteResult[whiteIndex:whiteLength]
 
+    # Linear Regression for Red and White Datasets
     print("\nLinear Regression:")
-    # Red dataset linear regression
-    redLinearModel = LinearModel()
-    redLinearModel.fit(redTrainX, redTrainY)
-    redPredictions = redLinearModel.predict_array(redTestX)
-    compareResults(redPredictions, redTestY, note="red")
+    linearModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    linearModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
-    # White dataset linear regression
-    whiteLinearModel = LinearModel()
-    whiteLinearModel.fit(whiteTrainX, whiteTrainY)
-    whitePredictions = whiteLinearModel.predict_array(whiteTestX)
-    compareResults(whitePredictions, whiteTestY, note="white")
-
+    # Logistic Regression for Red and White Datasets
     print("\nLogistic Regression:")
-    # Red dataset logistic regression
-    trainY = np.array([1 if x > 5 else 0 for x in redTrainY])
-    testY = np.array([1 if x > 5 else 0 for x in redTestY])
-    train_x_inter = logistic_model.add_intercept(redTrainX)
-    test_x_inter = logistic_model.add_intercept(redTestX)
-    classifier = logistic_model.LogisticModel(max_iter=1000, verbose=False)
-    classifier.fit(train_x_inter, trainY)
-    pred_y_prob = classifier.predict(test_x_inter)
-    compareResults([round(x) for x in pred_y_prob], testY, note="red")
+    logisticModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    logisticModel(whiteTrainX, whiteTrainY,
+                  whiteTestX, whiteTestY, note="White")
 
-    # White dataset logistic regression
-    trainY = np.array([1 if x > 5 else 0 for x in whiteTrainY])
-    testY = np.array([1 if x > 5 else 0 for x in whiteTestY])
-    train_x_inter = logistic_model.add_intercept(whiteTrainX)
-    test_x_inter = logistic_model.add_intercept(whiteTestX)
-    classifier = logistic_model.LogisticModel(max_iter=1000, verbose=False)
-    classifier.fit(train_x_inter, trainY)
-    pred_y_prob = classifier.predict(test_x_inter)
-    compareResults([round(x) for x in pred_y_prob], testY, note="white")
+    # Naive Bayes for Red and White Datasets
+    print("\nNaive Bayes:")
+    naiveBayes(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    naiveBayes(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
+
+    # KNN for Red and White Datasets
+    print("\nK-Nearest Neighbours:")
+    knn(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    knn(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
+
 
 if __name__ == '__main__':
     main(redDataset='../data/winequality-red.csv',
