@@ -5,29 +5,34 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
 
 
-def compareResults(predictions, trueLabels, verbose=False, note="Unknown"):
+def compareResults(predictions, trueLabels, note="-"):
     if (len(predictions) != len(trueLabels)):
         raise ValueError(
-            "The lengths of predictions and trueLabels are not the same.")
-    numSuccess = 0
-    for n in range(len(predictions)):
-        prediction = predictions[n]
-        trueLabel = trueLabels[n]
-        success = prediction == trueLabel
-        if success:
-            numSuccess += 1
-        if (verbose):
-            print(
-                f"prediction: {prediction}, true label: {trueLabel}, success: {success}")
-    print(f"{note} success rate: {round((100*numSuccess)/len(predictions), 2)}%.")
+            "The lengths of predictions and trueLabels are not the same."
+        )
+    if (not (type(predictions) is np.ndarray and type(trueLabels) is np.ndarray)):
+        print(f"predictions type: {type(predictions)}")
+        print(f"trueLabels type: {type(trueLabels)}")
+        raise TypeError(
+            "The type of predictions and trueLabels must be numpy array."
+        )
+    success_rate = np.mean(predictions == trueLabels)
+    average_loss = np.mean(np.absolute(trueLabels - predictions))
+    print(f"{note} success rate: {success_rate}.")
+    print(f"{note} average loss: {average_loss}.")
+    print("Confusion matrix:")
+    print(f"Labels: {set(trueLabels)}")
+    print(confusion_matrix(trueLabels, predictions))
+    return success_rate
 
 
 def linearModel(trainX, trainY, testX, testY, note="Unknown"):
     reg = LinearRegression().fit(trainX, trainY)
     prediction = [round(x) for x in reg.predict(testX)]
-    compareResults(prediction, testY, note=note)
+    compareResults(np.array(prediction), testY, note=note)
 
 
 def logisticModel(trainX, trainY, testX, testY, note="Unknown"):
@@ -37,7 +42,7 @@ def logisticModel(trainX, trainY, testX, testY, note="Unknown"):
     log.max_iter = 1000
     log.fit(trainX, logTrainY)
     prediction = [round(x) for x in log.predict(testX)]
-    compareResults(prediction, logTestY, note=note)
+    compareResults(np.array(prediction), np.array(logTestY), note=note)
 
 
 def naiveBayes(trainX, trainY, testX, testY, note="Unknown"):
@@ -56,10 +61,11 @@ def main(redDataset, whiteDataset):
     # Load dataset
     redFeatures, redResult = readDataset(redDataset)
     whiteFeatures, whiteResult = readDataset(whiteDataset)
+    trainSetPercentage = 0.8
 
     # Red dataset
     redLength = len(redFeatures)
-    redIndex = round(0.8*redLength)
+    redIndex = round(trainSetPercentage*redLength)
     redTrainX = redFeatures[0:redIndex]
     redTrainY = redResult[0:redIndex]
     redTestX = redFeatures[redIndex:redLength]
@@ -67,30 +73,30 @@ def main(redDataset, whiteDataset):
 
     # White dataset
     whiteLength = len(whiteFeatures)
-    whiteIndex = round(0.8*whiteLength)
+    whiteIndex = round(trainSetPercentage*whiteLength)
     whiteTrainX = whiteFeatures[0:whiteIndex]
     whiteTrainY = whiteResult[0:whiteIndex]
     whiteTestX = whiteFeatures[whiteIndex:whiteLength]
     whiteTestY = whiteResult[whiteIndex:whiteLength]
 
     # Linear Regression for Red and White Datasets
-    print("\nLinear Regression:")
+    print("\n==========================================\nLinear Regression:")
     linearModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     linearModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
     # Logistic Regression for Red and White Datasets
-    print("\nLogistic Regression:")
+    print("\n==========================================\nLogistic Regression:")
     logisticModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     logisticModel(whiteTrainX, whiteTrainY,
                   whiteTestX, whiteTestY, note="White")
 
     # Naive Bayes for Red and White Datasets
-    print("\nNaive Bayes:")
+    print("\n==========================================\nNaive Bayes:")
     naiveBayes(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     naiveBayes(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
     # KNN for Red and White Datasets
-    print("\nK-Nearest Neighbours:")
+    print("\n==========================================\nK-Nearest Neighbours:")
     knn(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     knn(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
