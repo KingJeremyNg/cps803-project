@@ -5,6 +5,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 
 
@@ -56,6 +58,17 @@ def knn(trainX, trainY, testX, testY, note="Unknown"):
     prediction = knn.predict(testX)
     compareResults(prediction, testY, note=note)
 
+def svmModel(trainX, trainY, testX, testY, note="Unknown"):
+    model = svm.SVC()
+    trained = model.fit(trainX, trainY)
+    prediction = trained.predict(testX)
+    compareResults(prediction, testY, note=note)
+
+def rfcModel(trainX, trainY, testX, testY, note="Unknown"):
+    rfc = RandomForestClassifier(n_estimators=200,random_state=0)
+    rfc.fit(trainX, trainY)
+    pred = rfc.predict(testX)
+    compareResults(pred, testY, note=note)
 
 def main(redDataset, whiteDataset):
     # Load dataset
@@ -99,6 +112,16 @@ def main(redDataset, whiteDataset):
     print("\n==========================================\nK-Nearest Neighbours:")
     knn(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     knn(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
+
+    #SVM for Red and White Datasets
+    print("\n==========================================\nSupport Vector Model:")
+    svmModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    svmModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
+
+    #RFC (Random Forest Classifier) on Red and White Datasets
+    print("\n==========================================\nRandom Forest Classifier:")
+    rfcModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    rfcModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
 
 if __name__ == '__main__':
