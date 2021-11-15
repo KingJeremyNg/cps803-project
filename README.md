@@ -28,6 +28,6 @@ $ python main.py
 # Results
 
 # Contributors
-Dingqui Liu
-Jeremy Ng
-Ryan Tracey
+Dingqui Liu  
+Jeremy Ng  
+Ryan Tracey  
