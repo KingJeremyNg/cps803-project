@@ -4,6 +4,7 @@
 * [Usage](#usage)
 * [Methods](#methods)
 * [Results](#results)
+* [Contributors](#contributors)
 
 # Introduction
 This is a python project that implements various Machine Learning methods on two wine datasets: red wine and white wine
@@ -25,3 +26,8 @@ $ python main.py
 # Methods
 
 # Results
+
+# Contributors
+Dingqui Liu
+Jeremy Ng
+Ryan Tracey
