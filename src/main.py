@@ -58,17 +58,20 @@ def knn(trainX, trainY, testX, testY, note="Unknown"):
     prediction = knn.predict(testX)
     compareResults(prediction, testY, note=note)
 
+
 def svmModel(trainX, trainY, testX, testY, note="Unknown"):
     model = svm.SVC()
     trained = model.fit(trainX, trainY)
     prediction = trained.predict(testX)
     compareResults(prediction, testY, note=note)
 
+
 def rfcModel(trainX, trainY, testX, testY, note="Unknown"):
-    rfc = RandomForestClassifier(n_estimators=200,random_state=0)
+    rfc = RandomForestClassifier(n_estimators=200, random_state=0)
     rfc.fit(trainX, trainY)
     pred = rfc.predict(testX)
     compareResults(pred, testY, note=note)
+
 
 def main(redDataset, whiteDataset):
     # Load dataset
@@ -113,12 +116,12 @@ def main(redDataset, whiteDataset):
     knn(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     knn(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
-    #SVM for Red and White Datasets
+    # SVM for Red and White Datasets
     print("\n==========================================\nSupport Vector Model:")
     svmModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     svmModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
-    #RFC (Random Forest Classifier) on Red and White Datasets
+    # RFC (Random Forest Classifier) on Red and White Datasets
     print("\n==========================================\nRandom Forest Classifier:")
     rfcModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     rfcModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
