@@ -73,34 +73,6 @@ def rfcModel(trainX, trainY, testX, testY, note="Unknown"):
     compareResults(pred, testY, note=note)
 
 
-def linearModel(trainX, trainY, testX, testY, note="Unknown"):
-    reg = LinearRegression().fit(trainX, trainY)
-    prediction = [round(x) for x in reg.predict(testX)]
-    compareResults(prediction, testY, note=note)
-
-
-def logisticModel(trainX, trainY, testX, testY, note="Unknown"):
-    logTrainY = [1 if x > 5 else 0 for x in trainY]
-    logTestY = [1 if x > 5 else 0 for x in testY]
-    log = LogisticRegression()
-    log.max_iter = 1000
-    log.fit(trainX, logTrainY)
-    prediction = [round(x) for x in log.predict(testX)]
-    compareResults(prediction, logTestY, note=note)
-
-
-def naiveBayes(trainX, trainY, testX, testY, note="Unknown"):
-    bayes = GaussianNB().fit(trainX, trainY)
-    prediction = bayes.predict(testX)
-    compareResults(prediction, testY, note=note)
-
-
-def knn(trainX, trainY, testX, testY, note="Unknown"):
-    knn = KNeighborsClassifier().fit(trainX, trainY)
-    prediction = knn.predict(testX)
-    compareResults(prediction, testY, note=note)
-
-
 def main(redDataset, whiteDataset):
     # Load dataset
     redFeatures, redResult = readDataset(redDataset)
