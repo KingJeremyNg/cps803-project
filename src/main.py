@@ -8,6 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
+from sklearn.neural_network import MLPClassifier
 
 
 def compareResults(predictions, trueLabels, note="-"):
@@ -72,6 +73,11 @@ def rfcModel(trainX, trainY, testX, testY, note="Unknown"):
     pred = rfc.predict(testX)
     compareResults(pred, testY, note=note)
 
+def mlpModel(trainX, trainY, testX, testY, note="Unknown"):
+    clf = MLPClassifier()
+    clf.fit(trainX, trainY)
+    pred = clf.predict(testX)
+    compareResults(pred, testY, note=note)
 
 def main(redDataset, whiteDataset):
     # Load dataset
@@ -125,6 +131,11 @@ def main(redDataset, whiteDataset):
     print("\n==========================================\nRandom Forest Classifier:")
     rfcModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     rfcModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
+
+    # Multi Layer Perception (Neural Network) on Red and White Datasets
+    print("\n==========================================\nMulti Layer Perception Neural Network:")
+    mlpModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    mlpModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
 
 if __name__ == '__main__':
