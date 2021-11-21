@@ -50,6 +50,11 @@ def main(redPath, whitePath):
     rfcModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     rfcModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
+    # Multi Layer Perception (Neural Network) on Red and White Datasets
+    print("\n==========================================\nMulti Layer Perception Neural Network:")
+    mlpModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    mlpModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
+
 
 if __name__ == '__main__':
     main(redPath='../data/winequality-red.csv',
