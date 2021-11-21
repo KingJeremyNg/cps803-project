@@ -1,4 +1,3 @@
-import sys
 import numpy as np
 from read_dataset import readDataset
 from linear_model import linearModel
@@ -9,27 +8,16 @@ from svm_model import svmModel
 from rfc_model import rfcModel
 
 
-def main(redDataset, whiteDataset):
-    # Load dataset
-    redFeatures, redResult = readDataset(redDataset)
-    whiteFeatures, whiteResult = readDataset(whiteDataset)
-    trainSetPercentage = 0.8
-
+def main(redPath, whitePath):
     # Red dataset
-    redLength = len(redFeatures)
-    redIndex = round(trainSetPercentage*redLength)
-    redTrainX = redFeatures[0:redIndex]
-    redTrainY = redResult[0:redIndex]
-    redTestX = redFeatures[redIndex:redLength]
-    redTestY = redResult[redIndex:redLength]
+    redTrainX, redTrainY, redTestX, redTestY = readDataset(redPath)
+    # print(redTrainX.shape, redTrainY.shape)
+    # print(redTestX.shape, redTestY.shape)
 
     # White dataset
-    whiteLength = len(whiteFeatures)
-    whiteIndex = round(trainSetPercentage*whiteLength)
-    whiteTrainX = whiteFeatures[0:whiteIndex]
-    whiteTrainY = whiteResult[0:whiteIndex]
-    whiteTestX = whiteFeatures[whiteIndex:whiteLength]
-    whiteTestY = whiteResult[whiteIndex:whiteLength]
+    whiteTrainX, whiteTrainY, whiteTestX, whiteTestY = readDataset(whitePath)
+    # print(whiteTrainX.shape, whiteTrainY.shape)
+    # print(whiteTestX.shape, whiteTestY.shape)
 
     # Linear Regression for Red and White Datasets
     print("\n==========================================\nLinear Regression:")
@@ -64,5 +52,5 @@ def main(redDataset, whiteDataset):
 
 
 if __name__ == '__main__':
-    main(redDataset='../data/winequality-red.csv',
-         whiteDataset='../data/winequality-white.csv')
+    main(redPath='../data/winequality-red.csv',
+         whitePath='../data/winequality-white.csv')
