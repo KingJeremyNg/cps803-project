@@ -6,6 +6,7 @@ from naive_bayes import naiveBayes
 from knn_model import knn
 from svm_model import svmModel
 from rfc_model import rfcModel
+from mlp_model import mlpModel
 
 
 def main(redPath, whitePath):
@@ -49,6 +50,11 @@ def main(redPath, whitePath):
     print("\n==========================================\nRandom Forest Classifier:")
     rfcModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     rfcModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
+
+    # Multi Layer Perception (Neural Network) on Red and White Datasets
+    print("\n==========================================\nMulti Layer Perception Neural Network:")
+    mlpModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
+    mlpModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
 
 
 if __name__ == '__main__':
