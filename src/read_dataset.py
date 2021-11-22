@@ -1,26 +1,12 @@
-import csv
 import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
 
 
 def readDataset(path):
-    features = []
-    result = []
-    with open(path, 'r') as csvFile:
-        rows = csv.DictReader(csvFile)
-        for row in rows:
-            features.append([
-                float(row['fixed acidity']),
-                float(row['volatile acidity']),
-                float(row['citric acid']),
-                float(row['residual sugar']),
-                float(row['chlorides']),
-                float(row['free sulfur dioxide']),
-                float(row['total sulfur dioxide']),
-                float(row['density']),
-                float(row['pH']),
-                float(row['sulphates']),
-                float(row['alcohol'])
-            ])
-            result.append(int(row['quality']))
-    csvFile.close()
-    return (np.array(features), np.array(result))
+    X = pd.read_csv(path, usecols=[i for i in range(11)]).to_numpy()
+    y = pd.read_csv(path, usecols=["quality"]).to_numpy()
+    trainX, testX, trainY, testY = train_test_split(
+        X, y, test_size=0.2, random_state=0)
+    # train_test_split is giving dim(n, 1) when it should be dim(n,)
+    return trainX, trainY[:, 0], testX, testY[:, 0]
