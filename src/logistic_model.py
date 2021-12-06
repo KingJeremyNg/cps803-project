@@ -10,4 +10,6 @@ def logisticModel(trainX, trainY, testX, testY, note="Unknown"):
     log.max_iter = 10000
     log.fit(trainX, logTrainY)
     prediction = [round(x) for x in log.predict(testX)]
-    compareResults(np.array(prediction), np.array(logTestY), note=note)
+    prediction_train = [round(x) for x in log.predict(trainX)]
+    compareResults(np.array(prediction_train), np.array(logTrainY), note=note + " train")
+    compareResults(np.array(prediction), np.array(logTestY), note=note + " valid")

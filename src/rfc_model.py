@@ -7,4 +7,6 @@ def rfcModel(trainX, trainY, testX, testY, note="Unknown"):
     rfc = RandomForestClassifier(n_estimators=200, random_state=0)
     rfc.fit(trainX, trainY)
     pred = rfc.predict(testX)
-    compareResults(pred, testY, note=note)
+    pred_train = rfc.predict(trainX)
+    compareResults(pred_train, trainY, note=note + " train")
+    compareResults(pred, testY, note=note + " valid")
