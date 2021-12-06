@@ -7,4 +7,6 @@ def mlpModel(trainX, trainY, testX, testY, note="Unknown"):
     clf.max_iter = 1000
     clf.fit(trainX, trainY)
     pred = clf.predict(testX)
-    compareResults(pred, testY, note=note)
+    pred_train = clf.predict(trainX)
+    compareResults(pred_train, trainY, note=note + " train")
+    compareResults(pred, testY, note=note + " valid")

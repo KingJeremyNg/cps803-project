@@ -6,4 +6,6 @@ from sklearn.naive_bayes import GaussianNB
 def naiveBayes(trainX, trainY, testX, testY, note="Unknown"):
     bayes = GaussianNB().fit(trainX, trainY)
     prediction = bayes.predict(testX)
-    compareResults(prediction, testY, note=note)
+    prediction_train = bayes.predict(trainX)
+    compareResults(prediction_train, trainY, note=note + " train")
+    compareResults(prediction, testY, note=note + " valid")
