@@ -1,5 +1,5 @@
 import numpy as np
-from compare_results import compareResults
+from compare_results import compareResults, bias_variance
 from sklearn import svm
 
 
@@ -10,3 +10,4 @@ def svmModel(trainX, trainY, testX, testY, note="Unknown"):
     prediction_train = trained.predict(trainX)
     compareResults(prediction_train, trainY, note=note + " train")
     compareResults(prediction, testY, note=note + " valid")
+    #bias_variance(trainX, trainY, testX, testY, trained, note)
