@@ -8,7 +8,7 @@ def readDataset(path):
     X = pd.read_csv(path, usecols=[i for i in range(11)]).to_numpy()
     y = pd.read_csv(path, usecols=["quality"]).to_numpy()
     trainX, testX, trainY, testY = train_test_split(
-        X, y, test_size=0.1, random_state=0)
+        X, y, test_size=0.3, random_state=0)
     sc = StandardScaler()
     trainX = sc.fit_transform(trainX)
     testX = sc.fit_transform(testX)

@@ -1,5 +1,6 @@
 from compare_results import compareResults, bias_variance
 from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import cross_val_score
 
 
 def mlpModel(trainX, trainY, testX, testY, note="Unknown"):
@@ -11,3 +12,4 @@ def mlpModel(trainX, trainY, testX, testY, note="Unknown"):
     compareResults(pred_train, trainY, note=note + " train")
     compareResults(pred, testY, note=note + " valid")
     #bias_variance(trainX, trainY, testX, testY, clf, note)
+    print(f'CV score: {cross_val_score(clf, testX, testY, cv=3).mean()}')
