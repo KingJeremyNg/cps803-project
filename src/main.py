@@ -7,6 +7,7 @@ from knn_model import knn
 from svm_model import svmModel
 from rfc_model import rfcModel
 from mlp_model import mlpModel
+from mlp_grid_search import mlpGridSearch
 
 
 def main(redPath, whitePath):
@@ -55,6 +56,21 @@ def main(redPath, whitePath):
     print("\n==========================================\nMulti Layer Perception Neural Network:")
     mlpModel(redTrainX, redTrainY, redTestX, redTestY, note="Red")
     mlpModel(whiteTrainX, whiteTrainY, whiteTestX, whiteTestY, note="White")
+
+    # MLP (Neural Network) GridSearch on Red and White Datasets
+    print("\n==========================================\nMLP Grid Search:")
+    parameter_space = {
+        'hidden_layer_sizes': [(50, 50, 50), (50, 100, 50), (100, 100, 100), (16, 32, 16), (100, 100, 100, 100, 100), (100,)],
+        'activation': ['tanh', 'relu', "logistic", "identity"],
+        "max_iter": [1200],
+        'alpha': [0.0001, 0.01, 0.001, 0.05],
+        'learning_rate': ['adaptive', 'constant'],
+        'solver': ['sgd', 'adam'],
+    }
+    mlpGridSearch(redTrainX, redTrainY, redTestX,
+                  redTestY, parameter_space, note="Red")
+    mlpGridSearch(whiteTrainX, whiteTrainY, whiteTestX,
+                  whiteTestY, parameter_space, note="White")
 
 
 if __name__ == '__main__':

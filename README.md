@@ -2,8 +2,6 @@
 * [Introduction](#introduction)
 * [Dependencies](#dependencies)
 * [Usage](#usage)
-* [Methods](#methods)
-* [Results](#results)
 * [Contributors](#contributors)
 
 # Introduction
@@ -15,6 +13,8 @@ This project is created with:
 * numpy 1.15.0
 * scikit-learn
 * matplotlib 2.2.2
+* pandas
+* mlxtend
 
 # Usage
 To run this project, install the files locally and run using python command line within the `src` directory:
@@ -22,10 +22,6 @@ To run this project, install the files locally and run using python command line
 $ cd src
 $ python main.py
 ```
-
-# Methods
-
-# Results
 
 # Contributors
 Dingqi Liu  
