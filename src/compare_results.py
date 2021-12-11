@@ -26,9 +26,10 @@ def compareResults(predictions, trueLabels, note="-"):
     # print(confusion_matrix(trueLabels, predictions))
     return success_rate
 
+
 def bias_variance(X_train, y_train, X_test, y_test, model, note):
     avg_expected_loss, avg_bias, avg_var = bias_variance_decomp(
-        model, X_train, y_train, X_test, y_test, 
+        model, X_train, y_train, X_test, y_test,
         loss='0-1_loss',
         random_seed=123,
         num_rounds=100)
