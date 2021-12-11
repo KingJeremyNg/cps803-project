@@ -9,7 +9,13 @@ def rfcModel(trainX, trainY, testX, testY, note="Unknown"):
     rfc.fit(trainX, trainY)
     pred = rfc.predict(testX)
     pred_train = rfc.predict(trainX)
-    compareResults(pred_train, trainY, note=note + " train")
-    compareResults(pred, testY, note=note + " valid")
+
+    pred_prob = rfc.predict_proba(testX)
+    pred_prob_train = rfc.predict_proba(trainX)
+    labels = rfc.classes_
+
+    compareResults(pred_train, trainY, pred_prob_train, labels, note=note + " train")
+    compareResults(pred, testY, pred_prob, labels, note=note + " valid")
+
     #bias_variance(trainX, trainY, testX, testY, rfc, note)
     print(f'CV score: {cross_val_score(rfc, testX, testY, cv=3).mean()}')

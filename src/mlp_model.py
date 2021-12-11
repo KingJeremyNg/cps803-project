@@ -9,7 +9,13 @@ def mlpModel(trainX, trainY, testX, testY, note="Unknown"):
     clf.fit(trainX, trainY)
     pred = clf.predict(testX)
     pred_train = clf.predict(trainX)
-    compareResults(pred_train, trainY, note=note + " train")
-    compareResults(pred, testY, note=note + " valid")
+
+    pred_prob = clf.predict_proba(testX)
+    pred_prob_train = clf.predict_proba(trainX)
+    labels = clf.classes_
+
+    compareResults(pred_train, trainY, pred_prob_train, labels, note=note + " train")
+    compareResults(pred, testY, pred_prob, labels, note=note + " valid")
+
     #bias_variance(trainX, trainY, testX, testY, clf, note)
     print(f'CV score: {cross_val_score(clf, testX, testY, cv=3).mean()}')

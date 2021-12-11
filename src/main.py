@@ -67,6 +67,7 @@ def main(redPath, whitePath):
         'learning_rate': ['adaptive', 'constant'],
         'solver': ['sgd', 'adam'],
     }
+
     mlpGridSearch(redTrainX, redTrainY, redTestX,
                   redTestY, parameter_space, note="Red")
     mlpGridSearch(whiteTrainX, whiteTrainY, whiteTestX,
