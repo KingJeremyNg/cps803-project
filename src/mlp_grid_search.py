@@ -2,6 +2,7 @@ from compare_results import compareResults
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import GridSearchCV
 
+
 def mlpGridSearch(trainX, trainY, testX, testY, parameter_space, note="Unknown"):
 
     mlp = MLPClassifier()

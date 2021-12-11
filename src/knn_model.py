@@ -1,6 +1,7 @@
 import numpy as np
-from compare_results import compareResults
+from compare_results import compareResults, bias_variance
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import cross_val_score
 
 
 def knn(trainX, trainY, testX, testY, note="Unknown"):
@@ -15,3 +16,5 @@ def knn(trainX, trainY, testX, testY, note="Unknown"):
 
     compareResults(prediction_train, trainY, pred_prob_train, labels, note=note + " train")
     compareResults(prediction, testY, pred_prob, labels, note=note + " valid")
+
+    print(f'CV score: {cross_val_score(knn, testX, testY, cv=3).mean()}')

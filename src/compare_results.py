@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.metrics import confusion_matrix, log_loss
+from mlxtend.evaluate import bias_variance_decomp
 
 
 def compareResults(predictions, trueLabels, pred_prob=None, labels=[], note="-"):
@@ -15,7 +16,10 @@ def compareResults(predictions, trueLabels, pred_prob=None, labels=[], note="-")
         )
     success_rate = np.mean(predictions == trueLabels)
     average_loss = np.mean(np.absolute(trueLabels - predictions))
+    bias = np.mean(trueLabels-predictions)
     print(f"{note} success rate: {success_rate}")
+    #print(f"{note} Variance: {np.var(predictions)}")
+    #print(f"{note} Average Bias: {bias}")
     # print(f"{note} average loss: {average_loss}")
     # print("Confusion matrix:")
     # print(f"Labels: {set(trueLabels)}")
@@ -25,3 +29,14 @@ def compareResults(predictions, trueLabels, pred_prob=None, labels=[], note="-")
         ll = log_loss(trueLabels, pred_prob, labels=labels)
         print(f"{note} cross entropy loss: {ll}")
     return success_rate
+
+
+def bias_variance(X_train, y_train, X_test, y_test, model, note):
+    avg_expected_loss, avg_bias, avg_var = bias_variance_decomp(
+        model, X_train, y_train, X_test, y_test,
+        loss='0-1_loss',
+        random_seed=123,
+        num_rounds=100)
+    print(f'{note} Average Expected Loss: {round(avg_expected_loss, 4)}')
+    print(f'{note} Average Bias: {round(avg_bias, 4)}')
+    print(f'{note} Average Variance: {round(avg_var, 4)}\n')

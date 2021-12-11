@@ -1,6 +1,7 @@
 import numpy as np
-from compare_results import compareResults
+from compare_results import compareResults, bias_variance
 from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import cross_val_score
 
 
 def naiveBayes(trainX, trainY, testX, testY, note="Unknown"):
@@ -14,3 +15,6 @@ def naiveBayes(trainX, trainY, testX, testY, note="Unknown"):
     
     compareResults(prediction_train, trainY, pred_prob_train,labels, note=note + " train")
     compareResults(prediction, testY, pred_prob, labels,note=note + " valid")
+
+    #bias_variance(trainX, trainY, testX, testY, bayes, note)
+    print(f'CV score: {cross_val_score(bayes, testX, testY, cv=3).mean()}')
