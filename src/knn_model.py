@@ -4,8 +4,14 @@ from sklearn.neighbors import KNeighborsClassifier
 
 
 def knn(trainX, trainY, testX, testY, note="Unknown"):
-    knn = KNeighborsClassifier().fit(trainX, trainY)
+    knn = KNeighborsClassifier()
+    knn.fit(trainX, trainY)
     prediction = knn.predict(testX)
     prediction_train = knn.predict(trainX)
-    compareResults(prediction_train, trainY, note=note + " train")
-    compareResults(prediction, testY, note=note + " valid")
+
+    pred_prob = knn.predict_proba(testX)
+    pred_prob_train = knn.predict_proba(trainX)
+    labels = knn.classes_
+
+    compareResults(prediction_train, trainY, pred_prob_train, labels, note=note + " train")
+    compareResults(prediction, testY, pred_prob, labels, note=note + " valid")

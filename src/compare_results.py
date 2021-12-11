@@ -1,8 +1,8 @@
 import numpy as np
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, log_loss
 
 
-def compareResults(predictions, trueLabels, note="-"):
+def compareResults(predictions, trueLabels, pred_prob=None, labels=[], note="-"):
     if (len(predictions) != len(trueLabels)):
         raise ValueError(
             "The lengths of predictions and trueLabels are not the same."
@@ -20,4 +20,8 @@ def compareResults(predictions, trueLabels, note="-"):
     # print("Confusion matrix:")
     # print(f"Labels: {set(trueLabels)}")
     # print(confusion_matrix(trueLabels, predictions))
+
+    if type(pred_prob) is np.ndarray:
+        ll = log_loss(trueLabels, pred_prob, labels=labels)
+        print(f"{note} cross entropy loss: {ll}")
     return success_rate
