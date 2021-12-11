@@ -5,10 +5,17 @@ from sklearn.model_selection import cross_val_score
 
 
 def knn(trainX, trainY, testX, testY, note="Unknown"):
-    knn = KNeighborsClassifier().fit(trainX, trainY)
+    knn = KNeighborsClassifier()
+    knn.fit(trainX, trainY)
     prediction = knn.predict(testX)
     prediction_train = knn.predict(trainX)
-    compareResults(prediction_train, trainY, note=note + " train")
-    compareResults(prediction, testY, note=note + " valid")
-    #bias_variance(trainX, trainY, testX, testY, knn, note)
+
+    pred_prob = knn.predict_proba(testX)
+    pred_prob_train = knn.predict_proba(trainX)
+    labels = knn.classes_
+
+    compareResults(prediction_train, trainY, pred_prob_train,
+                   labels, note=note + " train")
+    compareResults(prediction, testY, pred_prob, labels, note=note + " valid")
+
     print(f'CV score: {cross_val_score(knn, testX, testY, cv=3).mean()}')
